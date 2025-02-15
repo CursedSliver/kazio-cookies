@@ -438,7 +438,7 @@ Game.registerMod("Kaizo Cookies", {
 				kaizoCookies.prepauseAllowanceSettings[i] = decay.gameCan[i];
 				if (!kaizoCookies.skippedGameCanOnPause.includes(i)) { decay.gameCan[i] = false; }
 			}
-			decay.gamePauseL.style.display = '';
+			if (!Crumbs.mobile) { decay.gamePauseL.style.display = ''; }
 		}
 		this.unpauseGame = function() {
 			if (!kaizoCookies.paused) { return; }
@@ -447,7 +447,7 @@ Game.registerMod("Kaizo Cookies", {
 			for (let i in decay.gameCan) {
 				decay.gameCan[i] = kaizoCookies.prepauseAllowanceSettings[i];
 			}
-			decay.gamePauseL.style.display = 'none';
+			if (!Crumbs.mobile) { decay.gamePauseL.style.display = 'none'; }
 		}
 		addLoc('Assist option; shortcuts: Shift+C OR Shift+P');
 		addLoc('Pause'); addLoc('Unpause');
@@ -2074,23 +2074,25 @@ Game.registerMod("Kaizo Cookies", {
 		});
 
 		//mobile integration
-		injectCSS(`.bottomRightContainer { position: absolute; right: 20px; bottom: 20px; z-index: 10000000000000000000000; }`)
-		injectCSS(`.bottomRightAC { display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; padding: 4px; }`);
-		injectCSS(`.bottomRightAC:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 0, 0)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
-		injectCSS(`.bottomRightAC.enabled { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 81, 73)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`)
+		injectCSS(`.bottomRightContainer { position: absolute; right: 20px; bottom: 20px; z-index: 10000000000000000000000; display: flex; flex-direction: row; justify-content: flex-end; align-items: flex-end; }`)
+		injectCSS(`.bottomRightAC { width: 72px; height: 72px; padding: 4px; }`);
+		injectCSS(`.bottomRightBox { display: flex; align-items: center; justify-content: center; }`);
+		injectCSS(`.bottomRightBox:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 0, 0)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
+		injectCSS(`.bottomRightBox.enabled { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 81, 73)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
+		injectCSS(`.bottomRightPause { width: 60px; height: 60px; padding: 4px; margin-right: 10px; }`);
+
 		addLoc('ENABLE AUTOCLICK');
 		addLoc('Autoclicker only works when also pressing down on the big cookie or a wrinkler');
+		addLoc('TOGGLE PAUSE');
 		let autoClickerEle = document.createElement('div');
 		autoClickerEle.id = 'bottomRightContainer';
 		autoClickerEle.classList.add('bottomRightContainer');
 		l('game').appendChild(autoClickerEle);
 		decay.easyClicksEnable = false;
-		autoClickerEle.innerHTML = '<div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightAC" id="mobileAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 12px;" class="title">'+loc('ENABLE AUTOCLICK')+'</span></div>';
-		//AddEvent(autoClickerEle, 'touchstart', function() { decay.easyClicksEnable = true; });
+		autoClickerEle.innerHTML = '<div class="framed bottomRightBox bottomRightPause" style="" id="mobilePause"><span class="title" style="font-size: 14px; text-align: center;">'+loc('TOGGLE PAUSE')+'</span></div><div style="display: inline-block;"><div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightBox bottomRightAC" id="mobileAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 12px;" class="title">'+loc('ENABLE AUTOCLICK')+'</span></div></div>';
 		AddEvent(l('mobileAC'), 'touchstart', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
-		//AddEvent(autoClickerEle, 'mousedown', function() { decay.easyClicksEnable = true; console.log('a'); }); //debug
-		//AddEvent(l('mobileAC'), 'mouseup', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } }); //debug
-		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
+		AddEvent(l('mobilePause'), 'touchstart', function() { kaizoCookies.togglePause(); if (kaizoCookies.paused) { l('mobilePause').classList.add('enabled'); } else { l('mobilePause').classList.remove('enabled'); } })
+		//if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
 		
 		//decay scaling
 		decay.setRates = function() {
@@ -2602,7 +2604,7 @@ Game.registerMod("Kaizo Cookies", {
 			0: 0,
 			3: 0.01,
 			5: 0.02,
-			7: 0.035,
+			7: 0.03,
 			12: 0.035,
 			21: 0.03,
 			27: 0.015,
