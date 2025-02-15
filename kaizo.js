@@ -7577,9 +7577,9 @@ Game.registerMod("Kaizo Cookies", {
 			l('cookieAnchor').appendChild(bigCookie);
 			if (Game.touchEvents) {
 				AddEvent(bigCookie,'touchend',Game.ClickCookie);
-				AddEvent(bigCookie,'touchstart',function(event){if (decay.gameCan.click) { Game.BigCookieState=1; }if (event) event.preventDefault();});
-				AddEvent(bigCookie,'touchend',function(event){if (decay.gameCan.click) { Game.BigCookieState=0; }if (event) event.preventDefault();});
-				AddEvent(bigCookie,'touchcancel',function(event) { Game.BigCookieState=0; if (event) event.preventDefault(); });
+				AddEvent(bigCookie,'touchstart',function(event){if (decay.gameCan.click) { Game.BigCookieState=1; } Game.bigCookieHovered = true; if (event) event.preventDefault();});
+				AddEvent(bigCookie,'touchend',function(event){if (decay.gameCan.click) { Game.BigCookieState=0; } Game.bigCookieHovered = false; if (event) event.preventDefault();});
+				AddEvent(bigCookie,'touchcancel',function(event) { Game.BigCookieState=0; Game.bigCookieHovered = false; if (event) event.preventDefault(); });
 			} else {
 				AddEvent(bigCookie,'click',Game.ClickCookie);
 				AddEvent(bigCookie,'mousedown',function(event){if (decay.gameCan.click) { Game.BigCookieState=1; }if (Game.prefs.cookiesound) {Game.playCookieClickSound();}if (event) event.preventDefault();});
