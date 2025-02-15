@@ -2087,7 +2087,7 @@ Game.registerMod("Kaizo Cookies", {
 		decay.easyClicksEnable = false;
 		autoClickerEle.innerHTML = '<div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightAC" id="mobileAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 12px;" class="title">'+loc('ENABLE AUTOCLICK')+'</span></div>';
 		//AddEvent(autoClickerEle, 'touchstart', function() { decay.easyClicksEnable = true; });
-		AddEvent(l('mobileAC'), 'touchend', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
+		AddEvent(l('mobileAC'), 'touchstart', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
 		//AddEvent(autoClickerEle, 'mousedown', function() { decay.easyClicksEnable = true; console.log('a'); }); //debug
 		//AddEvent(l('mobileAC'), 'mouseup', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } }); //debug
 		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
