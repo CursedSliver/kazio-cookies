@@ -396,6 +396,8 @@ Game.registerMod("Kaizo Cookies", {
 				l('game').style.userSelect = 'none';
 
 				Game.Notify('Mobile', '', 0, 100000000, false, true);
+			} else {
+				Game.Notify('Not mobile', '', 0, 100000000, false, true);
 			}
 		}
 		this.paused = false;
