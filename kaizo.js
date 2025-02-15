@@ -571,7 +571,7 @@ Game.registerMod("Kaizo Cookies", {
 		decay.momentumUnlocked = false;
 		decay.cpsDiff = 1;
 		decay.acceleration = 1; //hoisting it up there to prevent funny issues
-		decay.DEBUG = false; //disable or enable the debugger statements
+		decay.DEBUG = true; //disable or enable the debugger statements
 		decay.hasEncounteredNotif = false;
 		decay.prefs = {
 			ascendOnInf: 1,
@@ -10771,10 +10771,12 @@ Game.registerMod("Kaizo Cookies", {
 		if (kaizoCookies.unpauseGame) { kaizoCookies.unpauseGame(); }
 		str = str.split('/'); 
 		Game.CloseNotes();
-		if (Crumbs.mobile) {
-			Game.Notify('Mobile', '', 0, 100000000, false, true);
-		} else {
-			Game.Notify('Not mobile', '', 0, 100000000, false, true);
+		if (decay.DEBUG) {
+			if (Crumbs.mobile) {
+				Game.Notify('Mobile', '', 0, 100000000, false, true);
+			} else {
+				Game.Notify('Not mobile', '', 0, 100000000, false, true);
+			}
 		}
 		let version = getVer(str[0]);
 		for (let i = 0; i < str[1].length; i += 2) { 
