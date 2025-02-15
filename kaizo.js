@@ -394,10 +394,6 @@ Game.registerMod("Kaizo Cookies", {
 				l('game').style.touchAction = 'manipulation';
 				l('game').style.webkitUserSelect = 'none';
 				l('game').style.userSelect = 'none';
-
-				Game.Notify('Mobile', '', 0, 100000000, false, true);
-			} else {
-				Game.Notify('Not mobile', '', 0, 100000000, false, true);
 			}
 		}
 		this.paused = false;
@@ -10775,6 +10771,11 @@ Game.registerMod("Kaizo Cookies", {
 		if (kaizoCookies.unpauseGame) { kaizoCookies.unpauseGame(); }
 		str = str.split('/'); 
 		Game.CloseNotes();
+		if (Crumbs.mobile) {
+			Game.Notify('Mobile', '', 0, 100000000, false, true);
+		} else {
+			Game.Notify('Not mobile', '', 0, 100000000, false, true);
+		}
 		let version = getVer(str[0]);
 		for (let i = 0; i < str[1].length; i += 2) { 
            	if (isv(str[1][i])) { kaizoCookies.achievements[i / 2].unlocked=parseInt(str[1][i]); }
