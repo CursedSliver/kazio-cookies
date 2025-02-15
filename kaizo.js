@@ -2074,21 +2074,22 @@ Game.registerMod("Kaizo Cookies", {
 		});
 
 		//mobile integration
-		//Game.Scroll = 1;
 		injectCSS(`.bottomRightContainer { position: absolute; right: 20px; bottom: 20px; z-index: 10000000000000000000000; }`)
 		injectCSS(`.bottomRightAC { display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; padding: 4px; }`);
-		injectCSS(`.bottomRightAC:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 81, 73)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
-		addLoc('ENABLE AUTOCLICK'); addLoc('HOLD');
+		injectCSS(`.bottomRightAC:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 0, 0)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
+		injectCSS(`.bottomRightAC.enabled { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 81, 73)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`)
+		addLoc('ENABLE AUTOCLICK');
 		addLoc('Autoclicker only works when also pressing down on the big cookie or a wrinkler');
 		let autoClickerEle = document.createElement('div');
 		autoClickerEle.id = 'bottomRightContainer';
 		autoClickerEle.classList.add('bottomRightContainer');
 		l('game').appendChild(autoClickerEle);
-		AddEvent(autoClickerEle, 'touchstart', function() { Game.Scroll = 1; });
-		AddEvent(autoClickerEle, 'touchend', function() { Game.Scroll = 0; });
-		AddEvent(autoClickerEle, 'mousedown', function() { Game.Scroll = 1; console.log('a'); }); //debug
-		AddEvent(autoClickerEle, 'mouseup', function() { Game.Scroll = 0; console.log('b'); }); //debug
-		autoClickerEle.innerHTML = '<div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 10px;" class="title">'+loc('ENABLE AUTOCLICKER')+'<br><span style="font-size: 16px; text-shadow: 0px 0px 8px 3px rgba(225, 255, 252, 0.8);">'+loc('HOLD')+'</span></span></div>';
+		decay.easyClicksEnable = false;
+		autoClickerEle.innerHTML = '<div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightAC" id="mobileAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 12px;" class="title">'+loc('ENABLE AUTOCLICK')+'</span></div>';
+		//AddEvent(autoClickerEle, 'touchstart', function() { decay.easyClicksEnable = true; });
+		AddEvent(l('mobileAC'), 'touchend', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
+		//AddEvent(autoClickerEle, 'mousedown', function() { decay.easyClicksEnable = true; console.log('a'); }); //debug
+		AddEvent(l('mobileAC'), 'mouseup', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } }); //debug
 		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
 		
 		//decay scaling
@@ -2760,7 +2761,7 @@ Game.registerMod("Kaizo Cookies", {
 			this.x = this.leftSection.offsetWidth / 2 + pos[0]; this.y = this.leftSection.offsetHeight * 0.4 + pos[1];
 			this.rotation = Math.PI * 2 - this.rad;
 			if (this.getComponent('pointerInteractive').hovered) {
-				if (Date.now() - decay.lastWrinklerScroll > 100 && !(decay.powerClicksOn() && decay.power >= decay.firstPowerClickReq) && !decay.isConditional('reindeer') && ((decay.prefs.scrollWrinklers && Game.Scroll!=0) || (Game.keys[65] && decay.prefs.touchpad))) { 
+				if (Date.now() - decay.lastWrinklerScroll > 100 && !(decay.powerClicksOn() && decay.power >= decay.firstPowerClickReq) && !decay.isConditional('reindeer') && ((decay.prefs.scrollWrinklers && Game.Scroll!=0) || (Game.keys[65] && decay.prefs.touchpad) || decay.easyClicksEnable)) { 
 					decay.onWrinklerClick.call(this);
 					//console.log(Date.now() - decay.lastWrinklerClick);
 					decay.lastWrinklerClick = Date.now();
@@ -4334,7 +4335,7 @@ Game.registerMod("Kaizo Cookies", {
 		decay.bounceBackInForce = 0;
 		Game.lastClickCount = Date.now();
 		eval('Game.Logic='+Game.Logic.toString()
-			.replace(`//if (Game.BigCookieState==2 && !Game.promptOn && Game.Scroll!=0) Game.ClickCookie();`, `if (Game.bigCookieHovered && !(decay.powerClicksOn() && Game.Has('Mammon') && decay.power >= decay.firstPowerClickReq) && !decay.isConditional('reindeer') && ((decay.prefs.scrollClick && Game.Scroll!=0) || (Game.keys[65] && decay.prefs.touchpad)) && !Game.promptOn && Date.now()-Game.lastClickCount >= 105) { Game.ClickCookie(); Game.BigCookieState = 1; decay.bounceBackInForce = 1 + randomFloor(Math.random()); }`)
+			.replace(`//if (Game.BigCookieState==2 && !Game.promptOn && Game.Scroll!=0) Game.ClickCookie();`, `if (Game.bigCookieHovered && !(decay.powerClicksOn() && Game.Has('Mammon') && decay.power >= decay.firstPowerClickReq) && !decay.isConditional('reindeer') && ((decay.prefs.scrollClick && Game.Scroll!=0) || (Game.keys[65] && decay.prefs.touchpad) || decay.easyClicksEnable) && !Game.promptOn && Date.now()-Game.lastClickCount >= 105) { Game.ClickCookie(); Game.BigCookieState = 1; decay.bounceBackInForce = 1 + randomFloor(Math.random()); }`)
 			.replace(`Beautify(Game.prestige)]);`, `Beautify(decay.getCpSBoostFromPrestige())]);`)
 		);
 		Game.registerHook('logic', function() {
