@@ -2073,6 +2073,22 @@ Game.registerMod("Kaizo Cookies", {
 				}
 			}
 		});
+
+		//mobile integration
+		Game.Scroll = 1;
+		injectCSS(`.bottomRightAC { position: absolute; display: flex; align-items: center; justify-content: center; right: 20px; bottom: 20px; width: 72px; height: 72px; z-index: 10000000000000000000000; }`);
+		injectCSS(`.bottomRightAC:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 81, 73)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
+		addLoc('ENABLE AUTOCLICK'); addLoc('HOLD');
+		let autoClickerEle = document.createElement('div');
+		autoClickerEle.id = 'mobileAC';
+		autoClickerEle.classList.add('framed'); autoClickerEle.classList.add('bottomRightAC');
+		l('game').appendChild(autoClickerEle);
+		AddEvent(autoClickerEle, 'touchstart', function() { Game.Scroll = 1; });
+		AddEvent(autoClickerEle, 'touchend', function() { Game.Scroll = 0; });
+		AddEvent(autoClickerEle, 'mousedown', function() { Game.Scroll = 1; console.log('a'); }); //debug
+		AddEvent(autoClickerEle, 'mouseup', function() { Game.Scroll = 0; console.log('b'); }); //debug
+		autoClickerEle.innerHTML = '<div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 9px;" class="title">'+loc('ENABLE AUTOCLICK')+'<br><span style="font-size: 16px;">'+loc('HOLD')+'</span></span>';
+		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
 		
 		//decay scaling
 		decay.setRates = function() {
