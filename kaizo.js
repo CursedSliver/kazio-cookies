@@ -2089,7 +2089,7 @@ Game.registerMod("Kaizo Cookies", {
 		//AddEvent(autoClickerEle, 'touchstart', function() { decay.easyClicksEnable = true; });
 		AddEvent(l('mobileAC'), 'touchend', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
 		//AddEvent(autoClickerEle, 'mousedown', function() { decay.easyClicksEnable = true; console.log('a'); }); //debug
-		AddEvent(l('mobileAC'), 'mouseup', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } }); //debug
+		//AddEvent(l('mobileAC'), 'mouseup', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } }); //debug
 		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
 		
 		//decay scaling
