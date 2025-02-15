@@ -3308,7 +3308,7 @@ Game.registerMod("Kaizo Cookies", {
 				shiny: shiny,
 				children: ([decay.wrinklerSoulShine1].concat(Game.prefs.fancy?decay.wrinklerSoulShine2:[])),
 				behaviors: [
-					new Crumbs.behaviorInstance(decay.wSoulMovement, { ddy: ddy * (shiny?1.5:1), dx: dx * (shiny?1.5:1) }),
+					new Crumbs.behaviorInstance(decay.wSoulMovement, { ddy: ddy * (shiny?1.35:1), dx: dx * (shiny?1.4:1) }),
 					new Crumbs.behaviorInstance(decay.wSoulClaim),
 					new Crumbs.behaviorInstance(decay.wSoulDeposit)
 				],
@@ -7579,6 +7579,7 @@ Game.registerMod("Kaizo Cookies", {
 				AddEvent(bigCookie,'touchend',Game.ClickCookie);
 				AddEvent(bigCookie,'touchstart',function(event){if (decay.gameCan.click) { Game.BigCookieState=1; }if (event) event.preventDefault();});
 				AddEvent(bigCookie,'touchend',function(event){if (decay.gameCan.click) { Game.BigCookieState=0; }if (event) event.preventDefault();});
+				AddEvent(bigCookie,'touchcancel',function(event) { Game.BigCookieState=0; if (event) event.preventDefault(); });
 			} else {
 				AddEvent(bigCookie,'click',Game.ClickCookie);
 				AddEvent(bigCookie,'mousedown',function(event){if (decay.gameCan.click) { Game.BigCookieState=1; }if (Game.prefs.cookiesound) {Game.playCookieClickSound();}if (event) event.preventDefault();});
