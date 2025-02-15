@@ -570,7 +570,7 @@ Game.registerMod("Kaizo Cookies", {
 		decay.momentumUnlocked = false;
 		decay.cpsDiff = 1;
 		decay.acceleration = 1; //hoisting it up there to prevent funny issues
-		decay.DEBUG = true; //disable or enable the debugger statements
+		decay.DEBUG = false; //disable or enable the debugger statements
 		decay.hasEncounteredNotif = false;
 		decay.prefs = {
 			ascendOnInf: 1,
