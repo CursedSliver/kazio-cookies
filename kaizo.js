@@ -2074,7 +2074,7 @@ Game.registerMod("Kaizo Cookies", {
 		});
 
 		//mobile integration
-		injectCSS(`.bottomRightContainer { position: absolute; right: 20px; bottom: 20px; z-index: 10000000000000000000000; display: flex; flex-direction: row; justify-content: flex-end; align-items: flex-end; }`)
+		injectCSS(`.bottomRightContainer { position: absolute; right: 20px; bottom: 20px; z-index: 10000000000000000000000; display: none; flex-direction: row; justify-content: flex-end; align-items: flex-end; }`)
 		injectCSS(`.bottomRightAC { width: 72px; height: 72px; padding: 4px; }`);
 		injectCSS(`.bottomRightBox { display: flex; align-items: center; justify-content: center; }`);
 		injectCSS(`.bottomRightBox:active { background: radial-gradient(circle at 50% 50%, #000, rgb(0, 0, 0)); box-shadow: 0px 0px 8px 3px rgba(3, 49, 44, 0.8); }`);
@@ -2092,7 +2092,7 @@ Game.registerMod("Kaizo Cookies", {
 		autoClickerEle.innerHTML = '<div class="framed bottomRightBox bottomRightPause" style="" id="mobilePause"><span class="title" style="font-size: 14px; text-align: center;">'+loc('TOGGLE PAUSE')+'</span></div><div style="display: inline-block;"><div class="title" style="text-align: center; font-size: 10px; width: 90px;">'+loc('Autoclicker only works when also pressing down on the big cookie or a wrinkler')+'</div><div class="framed bottomRightBox bottomRightAC" id="mobileAC"><div style="background-image: url(\'./img/icons.png\'); width: 48px; height: 48px; transform: scale(1.1); '+writeIcon([0, 2])+'"></div><span style="position: absolute; text-align: center; font-size: 12px;" class="title">'+loc('ENABLE AUTOCLICK')+'</span></div></div>';
 		AddEvent(l('mobileAC'), 'touchstart', function() { decay.easyClicksEnable = !decay.easyClicksEnable; if (decay.easyClicksEnable) { l('mobileAC').classList.add('enabled'); } else { l('mobileAC').classList.remove('enabled'); } });
 		AddEvent(l('mobilePause'), 'touchstart', function() { kaizoCookies.togglePause(); if (kaizoCookies.paused) { l('mobilePause').classList.add('enabled'); } else { l('mobilePause').classList.remove('enabled'); } })
-		//if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
+		if (Crumbs.mobile) { autoClickerEle.style.display = 'flex'; }
 		
 		//decay scaling
 		decay.setRates = function() {
@@ -10627,6 +10627,10 @@ Game.registerMod("Kaizo Cookies", {
 
 		Game.RebuildUpgrades();
 
+		if (Crumbs.mobile) { 
+			Game.Notify('Mobile notice', 'If you are currently using a phone to play Kaizo cookies, we strongly suggest that you use the horizontal orientation (long side on the bottom).', 0, 30);
+		}
+ 
 		//if (Game.cookiesEarned + Game.cookiesReset < 1000) { kaizoWarning = false; }
 		allValues('init completion');
 
